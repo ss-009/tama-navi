@@ -1,4 +1,4 @@
-// 打席一括入力の表（打順 × 何打席目）に関する純粋関数
+// 打席入力の表（打順 × 何打席目）に関する純粋関数
 import { type BattingResult, type Fielder, validateBattingResult } from "./batting-result";
 
 export const MAX_BATTING_ORDER = 30;

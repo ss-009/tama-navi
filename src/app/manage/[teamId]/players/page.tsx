@@ -38,7 +38,7 @@ export default async function PlayersPage({ params }: PageProps<"/manage/[teamId
               )}
             </span>
             {p.isGuest && <Badge>助っ人</Badge>}
-            {p.userId && <Badge tone="green">LINE</Badge>}
+            {p.userId && <Badge tone="green">メンバー</Badge>}
           </Link>
         </li>
       ))}

@@ -44,7 +44,7 @@ export default async function ScorebookPage({ params }: PageProps<"/manage/[team
           initialEntries={pas}
           scheduledInnings={game.scheduledInnings}
           isFinal={game.status === "final"}
-          defaultMarkFinal={game.status !== "cancelled" && game.gameDate <= todayJst()}
+          defaultMarkFinal={game.status !== "cancelled" && game.gameDate < todayJst()}
         />
       </Main>
     </>

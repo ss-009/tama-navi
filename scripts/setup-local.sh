@@ -24,8 +24,8 @@ else
 DATABASE_URL=postgresql://$(whoami)@localhost:5432/tama_navi
 BETTER_AUTH_SECRET=$(openssl rand -base64 32)
 BETTER_AUTH_URL=http://localhost:3100
-LINE_CLIENT_ID=dummy
-LINE_CLIENT_SECRET=dummy
+RESEND_API_KEY=
+MAIL_FROM=
 ENV
 fi
 pnpm db:migrate

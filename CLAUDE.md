@@ -10,7 +10,7 @@
 4. **`src/domain/` は純粋関数のみ**。Next.js・Drizzle に依存させない。変更したら Vitest のテストも更新する
 5. **Server Action は「zod で検証 → requireRole → 処理」の順**にする
 6. **閲覧用トークン（teams.public_token）で書き込みを許可しない**。招待トークンとは別物。`/teams/{slug}` は `is_listed = true` のチームだけ表示する
-7. UI の文言は日本語。**スマホでの操作を最優先にする**（モバイルファーストで組み、PCは広げるだけ。詳細は spec.md「UIの方針」）
+7. UI の文言は日本語。**モバイルファーストで組む**（入力はスマホ・PCの両方から行う。詳細は spec.md「UIの方針」）
 
 ## コマンド
 
@@ -23,6 +23,7 @@ pnpm build        # 本番ビルド
 pnpm db:generate  # schema.ts からマイグレーションを作る
 pnpm db:migrate   # マイグレーションを適用
 pnpm setup:local  # ローカルの初回準備（DB作成・.env作成・マイグレーション）
+pnpm db:seed      # サンプルチームを作る（ローカルのみ。slug = sample-bears のチームだけ作り直す）
 ```
 
 CI（GitHub Actions）は lint・typecheck・test を実行する。

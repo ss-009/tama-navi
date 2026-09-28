@@ -2,27 +2,24 @@
 
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { DEV_PASSWORD, DEV_USERS } from "@/lib/dev-users";
+import { ensureDevUser } from "@/server/actions/dev";
 
-// 開発用ログイン。pnpm dev のときだけ表示・有効（本番ではサーバー側でも無効）
-const DEV_USERS = [
-  { email: "dev-a@example.invalid", name: "開発ユーザーA" },
-  { email: "dev-b@example.invalid", name: "開発ユーザーB" },
-];
-const DEV_PASSWORD = "dev-password-1234";
-
+/** 開発用ログイン。pnpm dev のときだけ表示・有効（本番ではサーバー側でも無効） */
 export function DevLogin({ callbackURL }: { callbackURL: string }) {
   const [error, setError] = useState<string | null>(null);
 
   async function login(user: (typeof DEV_USERS)[number]) {
     setError(null);
+    const ready = await ensureDevUser(user.email);
+    if (!ready.ok) {
+      setError(ready.error);
+      return;
+    }
     const signIn = await authClient.signIn.email({ email: user.email, password: DEV_PASSWORD });
     if (signIn.error) {
-      // 初回はユーザーを作る（作成と同時にログインされる）
-      const signUp = await authClient.signUp.email({ email: user.email, password: DEV_PASSWORD, name: user.name });
-      if (signUp.error) {
-        setError(signUp.error.message ?? "ログインできませんでした");
-        return;
-      }
+      setError(signIn.error.message ?? "ログインできませんでした");
+      return;
     }
     window.location.assign(callbackURL);
   }

@@ -87,7 +87,7 @@ export default async function SettingsPage({ params }: PageProps<"/manage/[teamI
         {isOwner && (
           <Card>
             <SectionTitle>メンバー</SectionTitle>
-            <p className="mb-3 text-sm text-ink/60">オーナーは2人以上にしておくと安心です（機種変更でLINEを引き継がなかった場合に備えて）。</p>
+            <p className="mb-3 text-sm text-ink/60">オーナーは2人以上にしておくと安心です（1人がログインできなくなっても管理を続けられるように）。</p>
             <ul className="divide-y divide-ink/10">
               {members.map((m) => (
                 <li key={m.userId} className="space-y-2 py-3">

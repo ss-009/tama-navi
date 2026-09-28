@@ -1,25 +1,23 @@
 import { redirect } from "next/navigation";
 import { AppHeader } from "@/components/app-header";
-import { LoginForm } from "@/components/auth-forms";
-import { DevLogin } from "@/components/dev-login";
+import { SignupForm } from "@/components/auth-forms";
 import { Card, Main } from "@/components/ui";
 import { safeReturnTo } from "@/lib/return-to";
 import { getSession } from "@/server/auth/session";
 
-export const metadata = { title: "ログイン" };
+export const metadata = { title: "新規登録" };
 
-export default async function LoginPage({ searchParams }: PageProps<"/login">) {
+export default async function SignupPage({ searchParams }: PageProps<"/signup">) {
   const returnTo = safeReturnTo((await searchParams).returnTo);
   if (await getSession()) redirect(returnTo);
 
   return (
     <>
-      <AppHeader title="ログイン" backHref="/" />
+      <AppHeader title="新規登録" backHref={`/login?returnTo=${encodeURIComponent(returnTo)}`} />
       <Main>
         <Card>
-          <LoginForm returnTo={returnTo} />
+          <SignupForm returnTo={returnTo} />
         </Card>
-        {process.env.NODE_ENV === "development" && <DevLogin callbackURL={returnTo} />}
       </Main>
     </>
   );

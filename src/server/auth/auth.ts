@@ -4,25 +4,39 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { db } from "@/server/db";
 import { account, session, user, verification } from "@/server/db/schema";
+import { sendMail } from "@/server/mail";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: { user, session, account, verification },
   }),
-  // 開発用ログイン（pnpm dev のときだけ）。LINE のチャネルがなくても管理画面を試せるようにする
-  emailAndPassword: { enabled: process.env.NODE_ENV === "development" },
-  socialProviders: {
-    line: {
-      clientId: process.env.LINE_CLIENT_ID!,
-      clientSecret: process.env.LINE_CLIENT_SECRET!,
-      // メールアドレスの取得は LINE への申請が必要なので要求しない
-      disableDefaultScope: true,
-      scope: ["openid", "profile"],
-      // user.email は必須かつ一意なので、LINE のユーザーIDから使われないアドレスを作る
-      mapProfileToUser: (profile) => ({
-        email: profile.email ?? `line-${profile.sub}@users.tama-navi.invalid`,
-      }),
+  emailAndPassword: {
+    enabled: true,
+    // 確認メールのリンクを開くまでログインできない
+    requireEmailVerification: true,
+    minPasswordLength: 8,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendMail({
+        to: user.email,
+        subject: "【たまナビ】パスワードの再設定",
+        text: `${user.name} さん\n\n下のリンクから新しいパスワードを設定してください（1時間有効）。\n${url}\n\n心当たりがない場合は、このメールを無視してください。`,
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    // 確認前にログインしようとしたら、確認メールを送り直す
+    sendOnSignIn: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 60 * 60 * 24,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendMail({
+        to: user.email,
+        subject: "【たまナビ】メールアドレスの確認",
+        text: `${user.name} さん\n\nたまナビへの登録ありがとうございます。下のリンクを開くと本登録が完了します（24時間有効）。\n${url}\n\n心当たりがない場合は、このメールを無視してください。`,
+      });
     },
   },
   session: {

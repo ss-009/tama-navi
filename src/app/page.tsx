@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AppHeader, Ball } from "@/components/app-header";
 import { DevLogin } from "@/components/dev-login";
 import { HomeNav } from "@/components/home-nav";
-import { LineLoginButton } from "@/components/line-login-button";
 import { Badge, Card, EmptyState, LinkButton, Main, SectionTitle } from "@/components/ui";
 import { getSession } from "@/server/auth/session";
 import { listMyTeams } from "@/server/db/queries";
@@ -21,9 +20,9 @@ export default async function HomePage() {
         <Card className="space-y-4">
           <ul className="space-y-3 font-bold">
             {[
-              ["⚾", "試合が終わったら、スマホで全員の打席をまとめて入力"],
-              ["📊", "打率・OPS・能力ランクを自動で計算"],
-              ["👀", "成績はURLを知っていればログインなしで見られる"],
+              ["⚾", "選手のスコアや成績を登録できる"],
+              ["📊", "打率・防御率などの成績を自動で集計できる"],
+              ["👀", "チームページはログインなしで見られる"],
             ].map(([icon, text]) => (
               <li key={text} className="flex items-center gap-3">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xl">{icon}</span>
@@ -31,8 +30,15 @@ export default async function HomePage() {
               </li>
             ))}
           </ul>
-          <p className="text-sm font-bold text-ink/60">入力・管理をする人だけ LINE でログインしてください</p>
-          <LineLoginButton callbackURL="/" />
+          <p className="text-sm text-ink/60">チームページを見るだけならログインは不要です。スコアの登録やチームの管理をする人は、メールアドレスで登録してください。</p>
+          <div className="grid grid-cols-2 gap-2">
+            <LinkButton href="/signup" size="lg">
+              新規登録
+            </LinkButton>
+            <LinkButton href="/login" variant="secondary" size="lg">
+              ログイン
+            </LinkButton>
+          </div>
           {process.env.NODE_ENV === "development" && <DevLogin callbackURL="/" />}
         </Card>
       </Main>

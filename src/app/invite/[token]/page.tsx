@@ -1,6 +1,5 @@
 import { ActionForm } from "@/components/action-form";
 import { AppHeader } from "@/components/app-header";
-import { LineLoginButton } from "@/components/line-login-button";
 import { Card, LinkButton, Main } from "@/components/ui";
 import { acceptInvitation } from "@/server/actions/invitations";
 import { getSession } from "@/server/auth/session";
@@ -38,7 +37,17 @@ export default async function InvitePage({ params }: PageProps<"/invite/[token]"
           <p className="font-bold text-3xl">{found.team.name}</p>
           <p className="font-bold text-ink/70">参加すると、試合・選手・成績の登録や編集ができるようになります。</p>
           {!session ? (
-            <LineLoginButton callbackURL={`/invite/${token}`} label="LINEでログインして参加" />
+            <div className="space-y-2">
+              <p className="text-sm text-ink/70">参加するには、ログインまたは新規登録をしてください。</p>
+              <div className="grid grid-cols-2 gap-2">
+                <LinkButton href={`/signup?returnTo=${encodeURIComponent(`/invite/${token}`)}`} size="lg">
+                  新規登録
+                </LinkButton>
+                <LinkButton href={`/login?returnTo=${encodeURIComponent(`/invite/${token}`)}`} variant="secondary" size="lg">
+                  ログイン
+                </LinkButton>
+              </div>
+            </div>
           ) : role ? (
             <>
               <p className="font-bold text-grass-dark">すでにこのチームに参加しています</p>

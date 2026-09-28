@@ -1,6 +1,6 @@
 # 打席結果と成績の計算
 
-`src/domain/batting-result.ts` と `src/domain/stats.ts` の仕様。どちらも純粋関数で実装し、Vitest でテストする。
+`src/domain/` の計算の仕様。すべて純粋関数で実装し、Vitest でテストする。
 
 ## 打球方向（fielder）
 
@@ -102,11 +102,11 @@ formatBattingResult(result: BattingResult, fielder: Fielder | null): string
 validateBattingResult(result: BattingResult, fielder: Fielder | null): boolean
 ```
 
-入力画面では文字列をパースせず、「結果」と「方向」をボタンで選ばせる（[spec.md](spec.md#打席一括入力最重要) 参照）。
+入力画面では文字列をパースせず、「結果」と「方向」をボタンで選ばせる（[spec.md](spec.md#打席入力) 参照）。
 
-## 能力ランク（遊び要素）
+## 能力ランク
 
-`src/domain/abilities.ts`。選手ページに S〜G で表示する。草野球向けにしきい値をゆるめにしている。
+`src/domain/abilities.ts`。選手ページに S〜G で表示する。
 
 | 能力 | 指標 | S | A | B | C | D | E | F | 判定条件 |
 |---|---|---|---|---|---|---|---|---|---|

@@ -18,7 +18,7 @@ function isLocal(connectionString: string | undefined) {
   }
 }
 
-// 打席の一括保存でトランザクションを使うため、Neon は HTTP ドライバではなく WebSocket（Pool）を使う。
+// 打席の保存でトランザクションを使うため、Neon は HTTP ドライバではなく WebSocket（Pool）を使う。
 // どちらも同じ Postgres 用のクエリビルダーなので、型は Neon 側にそろえる
 export const db: NeonDatabase<typeof schema> = isLocal(url)
   ? (drizzlePg({ client: new PgPool({ connectionString: url }), schema }) as unknown as NeonDatabase<typeof schema>)
