@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@theme {
+  /* 文字・フチ */
+  --color-ink: #1a2238;
+  /* メイン（紺） */
+  --color-brand-50: #f0f3f9;
+  --color-brand-100: #dfe5f1;
+  --color-brand-500: #34467e;
+  --color-brand-600: #1f2d5a;
+  --color-brand-700: #18234a;
+  --color-brand-800: #111a38;
+  /* アクセント */
+  --color-sun: #ffcf33;
+  --color-sun-dark: #e6b000;
+  --color-grass: #2e9e50;
+  --color-grass-dark: #217a3c;
+  --color-dirt: #e8b778;
+  --color-hit: #e5303c;
+
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", system-ui, sans-serif;
+  --font-display: var(--font-sans);
+}
+
+/* 押せるもの（ボタン・カード型リンク）。細い線 + 薄い影。押すと少し縮む */
+@utility pop {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.06);
+  transition: transform 80ms ease, background-color 120ms ease, box-shadow 120ms ease;
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+@utility pop-sm {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  transition: transform 80ms ease, background-color 120ms ease;
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* 押さない枠（カード） */
+@utility panel {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+  box-shadow: 0 1px 3px rgb(16 24 40 / 0.05);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  background-color: #f1f3f7;
+  overscroll-behavior-y: none;
+}
+
+/* iOS で入力時に拡大されないよう 16px 以上 */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* セレクトの矢印を自前で描く（OS ごとの見た目の差をなくす） */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a2238' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1.1rem;
+  padding-right: 2.5rem !important;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-safe {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-pop-in {
+  animation: pop-in 260ms cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+
+/* モーダル: スマホは画面下に出るシート、PC は中央にふわっと出る */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-sheet {
+  animation: sheet-up 220ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+@media (min-width: 640px) {
+  .animate-sheet {
+    animation: dialog-in 140ms ease-out both;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 150ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pop-in,
+  .animate-sheet,
+  .animate-fade-in {
+    animation: none;
+  }
+}
